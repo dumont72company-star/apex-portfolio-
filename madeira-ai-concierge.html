@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madeira AI Concierge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --dark:#0c1e0e;
+  --forest:#173319;
+  --green:#2a5e30;
+  --mid:#3a7d42;
+  --accent:#52b05c;
+  --light:#7dca85;
+  --pale:#c2e4c5;
+  --cream:#f0f8f0;
+  --muted:#5a7a5d;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--dark);
+  color:#e8f5e9;
+  font-family:var(--sans);
+  font-weight:300;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;
+  background:rgba(12,30,14,.96);
+  border-bottom:1px solid rgba(82,176,92,.1);
+  backdrop-filter:blur(12px);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{
+  width:34px;height:34px;
+  background:var(--forest);
+  border:1px solid rgba(82,176,92,.3);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.95rem;
+}
+.nav-logo-name{
+  font-family:var(--serif);
+  font-size:.9rem;font-weight:400;
+  color:#e8f5e9;letter-spacing:.02em;
+}
+.nav-logo-name span{color:var(--accent);}
+.nav-demo{
+  font-size:.58rem;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dark);background:var(--accent);
+  padding:9px 18px;border-radius:4px;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100svh;
+  padding:100px 20px 60px;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%,rgba(42,94,48,.22) 0%,transparent 60%),
+    radial-gradient(ellipse 80% 50% at 100% 100%,rgba(23,51,25,.6) 0%,transparent 60%),
+    var(--dark);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(82,176,92,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(82,176,92,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.hero-content{position:relative;z-index:2;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(42,94,48,.3);
+  border:1px solid rgba(82,176,92,.2);
+  border-radius:100px;
+  padding:7px 14px;margin-bottom:28px;
+}
+.badge-dot{
+  width:6px;height:6px;background:var(--accent);
+  border-radius:50%;animation:pulse 2s infinite;
+}
+.badge-text{
+  font-size:.56rem;font-weight:400;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);
+}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(2.4rem,9vw,3.6rem);
+  font-weight:300;line-height:1.1;
+  color:#e8f5e9;margin-bottom:20px;
+}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-title .dim{color:var(--pale);opacity:.7;}
+.hero-sub{
+  font-size:.78rem;font-weight:300;
+  letter-spacing:.03em;line-height:1.85;
+  color:var(--muted);margin-bottom:36px;
+}
+.hero-btns{display:flex;flex-direction:column;gap:12px;margin-bottom:52px;}
+.btn-p{
+  font-size:.65rem;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dark);background:var(--accent);
+  padding:16px 24px;border-radius:6px;
+  text-decoration:none;text-align:center;
+  transition:background .25s;
+}
+.btn-p:hover{background:var(--light);}
+.btn-o{
+  font-size:.65rem;font-weight:400;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--pale);
+  border:1px solid rgba(194,228,197,.2);
+  padding:16px 24px;border-radius:6px;
+  text-decoration:none;text-align:center;
+  transition:all .25s;
+}
+.btn-o:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── CHAT MOCKUP ── */
+.chat-wrap{
+  background:var(--forest);
+  border:1px solid rgba(82,176,92,.18);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.chat-hd{
+  background:#173319;
+  padding:14px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(82,176,92,.12);
+}
+.chat-av{
+  width:36px;height:36px;
+  background:var(--green);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+.chat-hd-name{font-size:.78rem;font-weight:500;color:#e8f5e9;}
+.chat-hd-status{
+  font-size:.54rem;font-weight:300;color:var(--accent);
+  display:flex;align-items:center;gap:5px;margin-top:2px;
+}
+.chat-hd-status::before{content:'';width:5px;height:5px;background:var(--accent);border-radius:50%;}
+.chat-body{padding:16px;display:flex;flex-direction:column;gap:10px;}
+.msg{
+  max-width:82%;padding:10px 13px;border-radius:12px;
+  font-size:.67rem;font-weight:300;line-height:1.6;
+}
+.msg-time{font-size:.46rem;color:rgba(255,255,255,.3);text-align:right;margin-top:5px;}
+.msg-in{
+  background:rgba(42,94,48,.45);
+  border:1px solid rgba(82,176,92,.15);
+  color:var(--pale);border-bottom-left-radius:3px;align-self:flex-start;
+}
+.msg-out{
+  background:rgba(23,51,25,.9);
+  color:var(--pale);border-bottom-right-radius:3px;align-self:flex-end;
+}
+.msg-ai{
+  background:linear-gradient(135deg,rgba(82,176,92,.2),rgba(42,94,48,.3));
+  border:1px solid rgba(82,176,92,.2);
+  color:#e8f5e9;border-bottom-left-radius:3px;align-self:flex-start;
+}
+.typing{
+  display:flex;align-items:center;gap:4px;
+  background:rgba(42,94,48,.25);border:1px solid rgba(82,176,92,.1);
+  padding:10px 14px;border-radius:12px;border-bottom-left-radius:3px;
+  align-self:flex-start;width:fit-content;
+}
+.typing span{
+  width:5px;height:5px;background:var(--accent);border-radius:50%;
+  animation:bounce 1.4s infinite;
+}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+.langs-row{display:flex;gap:5px;flex-wrap:wrap;padding:4px 16px 16px;}
+.lp{
+  font-size:.48rem;font-weight:500;letter-spacing:.08em;
+  background:rgba(42,94,48,.35);border:1px solid rgba(82,176,92,.2);
+  color:var(--accent);padding:4px 9px;border-radius:100px;
+}
+
+/* ── STATS BAR ── */
+.stats{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:1px;background:rgba(82,176,92,.08);
+  border-top:1px solid rgba(82,176,92,.1);
+  border-bottom:1px solid rgba(82,176,92,.1);
+}
+.stat{
+  background:var(--forest);
+  padding:28px 20px;text-align:center;
+}
+.stat-v{
+  font-family:var(--serif);
+  font-size:2.2rem;font-weight:300;
+  color:var(--accent);line-height:1;margin-bottom:6px;
+}
+.stat-l{
+  font-size:.54rem;font-weight:400;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+}
+
+/* ── SECTION COMMONS ── */
+.sec{padding:80px 20px;}
+.sec-label{
+  font-size:.54rem;font-weight:500;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-label::before{content:'';width:20px;height:1px;background:var(--accent);}
+.sec-title{
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,7vw,2.8rem);
+  font-weight:300;line-height:1.15;
+  color:#e8f5e9;margin-bottom:12px;
+}
+.sec-title em{font-style:italic;color:var(--accent);}
+.sec-sub{
+  font-size:.7rem;font-weight:300;
+  letter-spacing:.04em;line-height:1.9;
+  color:var(--muted);
+}
+
+/* ── HOW IT WORKS ── */
+.how{background:var(--dark);}
+.steps{display:flex;flex-direction:column;gap:2px;margin-top:48px;}
+.step{
+  background:var(--forest);
+  padding:32px 24px;
+  position:relative;overflow:hidden;
+  border-left:2px solid transparent;
+  transition:border-color .3s;
+}
+.step:hover{border-left-color:var(--accent);}
+.step-num{
+  font-family:var(--serif);
+  font-size:2.8rem;font-weight:300;
+  color:rgba(82,176,92,.12);line-height:1;
+  margin-bottom:12px;
+}
+.step-ico{font-size:1.4rem;margin-bottom:12px;display:block;}
+.step-t{
+  font-size:.75rem;font-weight:500;
+  color:#e8f5e9;margin-bottom:8px;letter-spacing:.03em;
+}
+.step-d{
+  font-size:.65rem;font-weight:300;
+  color:var(--muted);line-height:1.8;
+}
+
+/* ── JOURNEY ── */
+.journey{background:var(--forest);}
+.stops{display:flex;flex-direction:column;gap:0;margin-top:48px;}
+.stop{
+  display:flex;gap:16px;
+  padding:24px 0;
+  border-bottom:1px solid rgba(82,176,92,.1);
+}
+.stop:last-child{border-bottom:none;}
+.stop-ico{
+  width:42px;height:42px;flex-shrink:0;
+  background:rgba(42,94,48,.5);
+  border:1px solid rgba(82,176,92,.2);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+}
+.stop-n{
+  font-size:.72rem;font-weight:500;
+  color:#e8f5e9;margin-bottom:5px;
+}
+.stop-d{
+  font-size:.62rem;font-weight:300;
+  color:var(--muted);line-height:1.7;
+}
+.stop-tag{
+  display:inline-block;
+  font-size:.46rem;font-weight:500;letter-spacing:.1em;
+  color:var(--accent);background:rgba(82,176,92,.1);
+  border:1px solid rgba(82,176,92,.2);
+  padding:3px 9px;border-radius:100px;margin-top:7px;
+}
+
+/* ── FOR WHOM ── */
+.forwho{background:var(--dark);}
+.cards{display:flex;flex-direction:column;gap:2px;margin-top:48px;}
+.card{
+  background:var(--forest);
+  padding:36px 24px;
+}
+.card-tag{
+  font-size:.5rem;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dark);background:var(--accent);
+  padding:4px 12px;border-radius:2px;
+  display:inline-block;margin-bottom:20px;
+}
+.card-ico{font-size:1.8rem;margin-bottom:16px;display:block;}
+.card-t{
+  font-family:var(--serif);
+  font-size:1.3rem;font-weight:300;
+  color:#e8f5e9;margin-bottom:10px;
+}
+.card-d{
+  font-size:.65rem;font-weight:300;
+  color:var(--muted);line-height:1.85;margin-bottom:24px;
+}
+.bullets{display:flex;flex-direction:column;gap:8px;}
+.bullet{
+  font-size:.63rem;font-weight:300;
+  color:var(--pale);display:flex;align-items:flex-start;gap:10px;line-height:1.6;
+}
+.bullet::before{content:'✓';color:var(--accent);flex-shrink:0;}
+
+/* ── LANGUAGES ── */
+.languages{
+  background:var(--forest);
+  padding:64px 20px;text-align:center;
+  border-top:1px solid rgba(82,176,92,.1);
+  border-bottom:1px solid rgba(82,176,92,.1);
+}
+.lang-t{
+  font-family:var(--serif);
+  font-size:1.5rem;font-weight:300;
+  color:#e8f5e9;margin-bottom:8px;
+}
+.lang-s{
+  font-size:.64rem;color:var(--muted);
+  letter-spacing:.08em;margin-bottom:32px;
+}
+.lang-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:8px;max-width:340px;margin:0 auto;
+}
+.lc{
+  font-size:.64rem;font-weight:400;letter-spacing:.06em;
+  color:#e8f5e9;
+  background:rgba(42,94,48,.4);
+  border:1px solid rgba(82,176,92,.18);
+  padding:12px 16px;border-radius:8px;
+  transition:all .25s;
+  display:flex;align-items:center;gap:8px;
+}
+.lc:hover{background:rgba(82,176,92,.2);border-color:var(--accent);}
+
+/* ── CTA ── */
+.cta-sec{
+  background:var(--dark);
+  padding:100px 20px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-sec::before{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(42,94,48,.12) 0%,transparent 70%);
+}
+.cta-ey{
+  font-size:.54rem;font-weight:400;
+  letter-spacing:.24em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:20px;
+}
+.cta-t{
+  font-family:var(--serif);
+  font-size:clamp(2rem,8vw,3.2rem);
+  font-weight:300;line-height:1.15;
+  color:#e8f5e9;margin-bottom:16px;
+}
+.cta-t em{font-style:italic;color:var(--accent);}
+.cta-s{
+  font-size:.7rem;font-weight:300;
+  color:var(--muted);line-height:1.9;
+  margin-bottom:40px;
+}
+.cta-btns{display:flex;flex-direction:column;gap:12px;}
+.cta-form{margin-top:28px;display:flex;flex-direction:column;gap:10px;}
+.cta-inp{
+  background:var(--forest);
+  border:1px solid rgba(82,176,92,.2);
+  color:#e8f5e9;
+  font-family:var(--sans);font-size:.68rem;font-weight:300;
+  padding:15px 18px;border-radius:6px;outline:none;
+  transition:border-color .3s;
+}
+.cta-inp::placeholder{color:var(--muted);}
+.cta-inp:focus{border-color:var(--accent);}
+.cta-btn{
+  background:var(--accent);border:none;
+  color:var(--dark);font-family:var(--sans);
+  font-size:.62rem;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  padding:15px 24px;border-radius:6px;cursor:pointer;
+  transition:background .25s;
+}
+.cta-btn:hover{background:var(--light);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--forest);
+  border-top:1px solid rgba(82,176,92,.1);
+  padding:56px 20px 36px;
+}
+.footer-logo{
+  font-family:var(--serif);
+  font-size:1.2rem;font-weight:300;
+  color:#e8f5e9;margin-bottom:10px;
+}
+.footer-logo span{color:var(--accent);}
+.footer-tag{
+  font-size:.62rem;font-weight:300;
+  color:var(--muted);line-height:1.85;margin-bottom:40px;
+}
+.footer-cols{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:32px;margin-bottom:48px;
+}
+.footer-col-t{
+  font-size:.52rem;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:16px;
+}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{
+  font-size:.62rem;font-weight:300;
+  color:var(--muted);text-decoration:none;transition:color .25s;
+}
+.footer-links a:hover{color:var(--accent);}
+.footer-bot{
+  display:flex;flex-direction:column;gap:12px;
+  padding-top:24px;border-top:1px solid rgba(82,176,92,.08);
+}
+.footer-copy{
+  font-size:.52rem;font-weight:300;
+  letter-spacing:.06em;color:var(--muted);
+}
+.footer-copy span{color:var(--accent);}
+.proto-badge{
+  font-size:.5rem;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dark);background:var(--accent);
+  padding:6px 12px;border-radius:3px;
+  display:inline-block;width:fit-content;
+}
+
+/* ── PROTO FIXED BADGE ── */
+.proto-fixed{
+  position:fixed;bottom:16px;right:16px;
+  background:rgba(82,176,92,.95);
+  color:var(--dark);font-family:var(--sans);
+  font-size:.5rem;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;
+  padding:8px 14px;border-radius:4px;z-index:200;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:.4;transform:scale(.75);}
+}
+@keyframes bounce{
+  0%,60%,100%{transform:translateY(0);}
+  30%{transform:translateY(-6px);}
+}
+.reveal{
+  opacity:0;transform:translateY(20px);
+  transition:opacity .6s cubic-bezier(.23,1,.32,1),transform .6s cubic-bezier(.23,1,.32,1);
+}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.08s;}
+.d2{transition-delay:.16s;}
+.d3{transition-delay:.24s;}
+.d4{transition-delay:.32s;}
+
+/* ── DESKTOP OVERRIDES ── */
+@media(min-width:768px){
+  nav{padding:20px 48px;}
+  .hero{padding:120px 48px 80px;flex-direction:row;align-items:center;gap:60px;min-height:100vh;}
+  .hero-content{flex:1;}
+  .chat-wrap{flex:0 0 340px;}
+  .hero-btns{flex-direction:row;}
+  .stats{grid-template-columns:repeat(4,1fr);}
+  .sec{padding:100px 48px;}
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);}
+  .lang-grid{grid-template-columns:repeat(4,1fr);max-width:640px;}
+  .footer-cols{grid-template-columns:repeat(4,1fr);}
+  .footer-bot{flex-direction:row;align-items:center;justify-content:space-between;}
+  .cta-btns{flex-direction:row;justify-content:center;}
+  .cta-form{flex-direction:row;max-width:440px;margin:28px auto 0;}
+  .cta-inp{border-radius:6px 0 0 6px;}
+  .cta-btn{border-radius:0 6px 6px 0;white-space:nowrap;}
+}
+@media(min-width:1024px){
+  nav{padding:24px 60px;}
+  .nav-logo-name{font-size:1rem;}
+  .sec{padding:120px 60px;}
+  .steps{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="proto-fixed">🌿 Prototype</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🌿</div>
+    <div class="nav-logo-name">Madeira <span>AI</span> Concierge</div>
+  </a>
+  <a href="#cta" class="nav-demo">Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content" style="animation:fadeUp .8s .1s both;">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">24/7 · 8+ Languages · WhatsApp</span>
+    </div>
+    <h1 class="hero-title">
+      Your guests<br>speak.<br>
+      <em>We answer.</em><br>
+      <span class="dim">Always.</span>
+    </h1>
+    <p class="hero-sub">
+      24/7 multilingual AI concierge for hotels, restaurants and tour operators across Madeira — via WhatsApp, web and kiosk. From airport to departure.
+    </p>
+    <div class="hero-btns">
+      <a href="#cta" class="btn-p">Request a Demo</a>
+      <a href="#how" class="btn-o">How It Works</a>
+    </div>
+  </div>
+
+  <!-- Chat mockup -->
+  <div class="chat-wrap" style="animation:fadeUp .8s .3s both;">
+    <div class="chat-hd">
+      <div class="chat-av">🌿</div>
+      <div>
+        <div class="chat-hd-name">Madeira Concierge</div>
+        <div class="chat-hd-status">Online now</div>
+      </div>
+    </div>
+    <div class="chat-body">
+      <div class="msg msg-out">
+        Just landed! Any restaurant near my hotel tonight?
+        <div class="msg-time">16:42</div>
+      </div>
+      <div class="msg msg-ai">
+        Welcome to Madeira! 🌿 Top picks near you:<br><br>
+        <strong>1. Restaurante do Forte</strong> — seafood, ocean view<br>
+        <strong>2. Tasca do Carmo</strong> — traditional espetada<br>
+        <strong>3. Il Gallo d'Oro</strong> — Michelin starred<br><br>
+        Shall I make a reservation for tonight?
+        <div class="msg-time">16:42 ✓✓</div>
+      </div>
+      <div class="msg msg-out">
+        Yes! Table for 2 at 8pm, first option please.
+        <div class="msg-time">16:43</div>
+      </div>
+      <div class="typing"><span></span><span></span><span></span></div>
+    </div>
+    <div class="langs-row">
+      <span class="lp">🇬🇧 EN</span><span class="lp">🇵🇹 PT</span>
+      <span class="lp">🇩🇪 DE</span><span class="lp">🇫🇷 FR</span>
+      <span class="lp">🇪🇸 ES</span><span class="lp">🇮🇹 IT</span>
+      <span class="lp">🇳🇱 NL</span><span class="lp">🇸🇪 SE</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats reveal">
+  <div class="stat"><div class="stat-v">24/7</div><div class="stat-l">Always On</div></div>
+  <div class="stat"><div class="stat-v">8+</div><div class="stat-l">Languages</div></div>
+  <div class="stat"><div class="stat-v">&lt;2s</div><div class="stat-l">Response</div></div>
+  <div class="stat"><div class="stat-v">100%</div><div class="stat-l">WhatsApp</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="sec how" id="how">
+  <div class="reveal">
+    <div class="sec-label">Simple by Design</div>
+    <h2 class="sec-title">How It <em>Works</em></h2>
+    <p class="sec-sub">No apps to download. No training needed. Guests just message — and get instant intelligent answers.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal d1">
+      <div class="step-num">01</div>
+      <span class="step-ico">✈️</span>
+      <div class="step-t">Guest Lands</div>
+      <div class="step-d">QR code at airport arrivals connects guests to the concierge before they reach the hotel.</div>
+    </div>
+    <div class="step reveal d2">
+      <div class="step-num">02</div>
+      <span class="step-ico">💬</span>
+      <div class="step-t">They Ask Anything</div>
+      <div class="step-d">Restaurants, activities, transport, local tips — in their language, any hour of the day.</div>
+    </div>
+    <div class="step reveal d3">
+      <div class="step-num">03</div>
+      <span class="step-ico">🤖</span>
+      <div class="step-t">AI Responds Instantly</div>
+      <div class="step-d">Trained on Madeira's tourism ecosystem. Accurate answers, instant delivery, zero wait.</div>
+    </div>
+    <div class="step reveal d4">
+      <div class="step-num">04</div>
+      <span class="step-ico">📊</span>
+      <div class="step-t">You Get the Insights</div>
+      <div class="step-d">Weekly reports on guest behaviour, peak request types, and satisfaction signals.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TOURIST JOURNEY -->
+<section class="sec journey" id="journey">
+  <div class="reveal">
+    <div class="sec-label">End-to-End</div>
+    <h2 class="sec-title">The Complete <em>Journey</em></h2>
+    <p class="sec-sub">From the moment guests land to the moment they leave — we're with them at every touchpoint.</p>
+  </div>
+  <div class="stops">
+    <div class="stop reveal d1">
+      <div class="stop-ico">✈️</div>
+      <div>
+        <div class="stop-n">Aeroporto CR7 — First Contact</div>
+        <div class="stop-d">The single guaranteed touchpoint for every tourist arriving in Madeira. QR code at arrivals connects guests instantly.</div>
+        <span class="stop-tag">Priority B2G Channel</span>
+      </div>
+    </div>
+    <div class="stop reveal d2">
+      <div class="stop-ico">🏨</div>
+      <div>
+        <div class="stop-n">Hotel Check-In</div>
+        <div class="stop-d">Reception freed for memorable human moments. AI handles FAQs, room queries, and recommendations 24/7.</div>
+        <span class="stop-tag">Liberates Staff</span>
+      </div>
+    </div>
+    <div class="stop reveal d3">
+      <div class="stop-ico">🥾</div>
+      <div>
+        <div class="stop-n">Activities & Experiences</div>
+        <div class="stop-d">Hiking, levada walks, whale watching, guided tours — instant booking and personalised tips.</div>
+      </div>
+    </div>
+    <div class="stop reveal d4">
+      <div class="stop-ico">🍽️</div>
+      <div>
+        <div class="stop-n">Dining & Restaurants</div>
+        <div class="stop-d">Real-time recommendations, reservations, and menu translation across partner restaurants.</div>
+      </div>
+    </div>
+    <div class="stop reveal">
+      <div class="stop-ico">🛍️</div>
+      <div>
+        <div class="stop-n">Shopping & Departure</div>
+        <div class="stop-d">Local crafts, wine, embroidery — where to find them, what to pay. Plus transport back to the airport.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section class="sec forwho" id="forwho">
+  <div class="reveal">
+    <div class="sec-label">Who We Serve</div>
+    <h2 class="sec-title">Built for <em>Madeira's</em> Hospitality</h2>
+    <p class="sec-sub">Hotels, restaurants, tour operators — we integrate seamlessly into your business.</p>
+  </div>
+  <div class="cards">
+    <div class="card reveal d1">
+      <span class="card-tag">Hotels & Resorts</span>
+      <span class="card-ico">🏨</span>
+      <div class="card-t">For Hoteliers</div>
+      <div class="card-d">Transform reception into a hub for memorable experiences. Your staff focus on what matters — the AI handles the rest.</div>
+      <div class="bullets">
+        <div class="bullet">24/7 guest support in 8+ languages</div>
+        <div class="bullet">WhatsApp, web & kiosk integration</div>
+        <div class="bullet">Weekly guest behaviour reports</div>
+        <div class="bullet">Zero staff training required</div>
+      </div>
+    </div>
+    <div class="card reveal d2">
+      <span class="card-tag">Restaurants</span>
+      <span class="card-ico">🍽️</span>
+      <div class="card-t">For Restaurateurs</div>
+      <div class="card-d">Get discovered by tourists already looking for what you offer. Automated reservations, zero friction.</div>
+      <div class="bullets">
+        <div class="bullet">Automatic reservation handling</div>
+        <div class="bullet">Menu translation on demand</div>
+        <div class="bullet">Integrated into tourist journey</div>
+        <div class="bullet">Increased table occupancy</div>
+      </div>
+    </div>
+    <div class="card reveal d3">
+      <span class="card-tag">Tour Operators</span>
+      <span class="card-ico">🥾</span>
+      <div class="card-t">For Operators</div>
+      <div class="card-d">Be recommended at the right moment, to the right tourist, in their language. Bookings via WhatsApp.</div>
+      <div class="bullets">
+        <div class="bullet">Contextual tourist recommendations</div>
+        <div class="bullet">Real-time availability & booking</div>
+        <div class="bullet">Multi-language included</div>
+        <div class="bullet">Subscription or commission model</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LANGUAGES -->
+<div class="languages reveal" id="languages">
+  <div class="sec-label" style="justify-content:center;margin-bottom:12px;">Truly Multilingual</div>
+  <div class="lang-t">One Concierge. Every Language.</div>
+  <div class="lang-s">Your guests speak their language. We make sure they're always understood.</div>
+  <div class="lang-grid">
+    <div class="lc">🇬🇧 English</div>
+    <div class="lc">🇵🇹 Português</div>
+    <div class="lc">🇩🇪 Deutsch</div>
+    <div class="lc">🇫🇷 Français</div>
+    <div class="lc">🇪🇸 Español</div>
+    <div class="lc">🇮🇹 Italiano</div>
+    <div class="lc">🇳🇱 Nederlands</div>
+    <div class="lc">🇸🇪 Svenska</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-sec" id="cta">
+  <div class="reveal">
+    <div class="cta-ey">Ready to Transform Guest Experience?</div>
+    <h2 class="cta-t">Let's Talk About<br><em>Your Property</em></h2>
+    <p class="cta-s">Book a 30-minute demo and see exactly how Madeira AI Concierge works for your business.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-p">Book a Demo Call</a>
+      <a href="#" class="btn-o">Download Brochure</a>
+    </div>
+    <div class="cta-form">
+      <input type="email" class="cta-inp" placeholder="Your business email">
+      <button class="cta-btn">Get in Touch</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🌿 Madeira AI <span>Concierge</span></div>
+  <p class="footer-tag">Your island, always on. 24/7 multilingual AI concierge for Madeira's hospitality industry. WhatsApp native. Zero friction.</p>
+  <div class="footer-cols">
+    <div>
+      <div class="footer-col-t">Product</div>
+      <ul class="footer-links">
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">For Hotels</a></li>
+        <li><a href="#">For Restaurants</a></li>
+        <li><a href="#">Pricing</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-t">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Technology</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-t">Contact</div>
+      <ul class="footer-links">
+        <li><a href="#">Book a Demo</a></li>
+        <li><a href="#">WhatsApp Us</a></li>
+        <li><a href="#">Funchal, Madeira</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-t">Group</div>
+      <ul class="footer-links">
+        <li><a href="#">Apex Commerce</a></li>
+        <li><a href="#">Brayan London</a></li>
+        <li><a href="#">Reverta Agency</a></li>
+        <li><a href="#">OceanData</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <div class="footer-copy">© 2025 Madeira AI Concierge · Part of <span>Apex Commerce Group</span></div>
+    <span class="proto-badge">Prototype v1.0</span>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}
+  });
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
