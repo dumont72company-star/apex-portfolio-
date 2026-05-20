@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reverta — Agência de Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --black:#0a0a0a;--off:#111;--charcoal:#1c1c1c;--mid:#2e2e2e;
+  --muted:#777;--light:#bbb;--pale:#efefed;--white:#f7f7f5;
+  --red:#E84444;--red2:#ff5a5a;
+  --serif:'Fraunces',Georgia,serif;--sans:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--black);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(247,247,245,.97);border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:blur(12px);}
+.logo-svg{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-wordmark{font-family:var(--sans);font-size:1.1rem;font-weight:700;letter-spacing:-.02em;color:var(--black);}
+.logo-wordmark span{color:var(--red);}
+.nav-cta{font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--white);background:var(--red);padding:10px 20px;border-radius:4px;text-decoration:none;transition:background .25s;white-space:nowrap;}
+.nav-cta:hover{background:var(--red2);}
+
+/* HERO */
+.hero{min-height:100svh;padding:100px 20px 60px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:var(--white);}
+.hero-accent{position:absolute;top:-120px;right:-120px;width:400px;height:400px;background:radial-gradient(circle,rgba(232,68,68,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-content{position:relative;z-index:2;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;}
+.eyebrow-line{width:28px;height:2px;background:var(--red);}
+.eyebrow-text{font-size:.58rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--red);}
+.hero-title{font-family:var(--serif);font-size:clamp(2.6rem,9vw,4.2rem);font-weight:300;line-height:1.08;color:var(--black);margin-bottom:24px;}
+.hero-title em{font-style:italic;color:var(--red);}
+.hero-sub{font-size:.8rem;font-weight:300;line-height:1.85;color:var(--muted);margin-bottom:40px;max-width:480px;}
+.hero-btns{display:flex;flex-direction:column;gap:12px;margin-bottom:60px;}
+.btn-p{font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--white);background:var(--black);padding:17px 28px;border-radius:4px;text-decoration:none;text-align:center;transition:background .25s;}
+.btn-p:hover{background:var(--red);}
+.btn-o{font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--black);border:1.5px solid rgba(0,0,0,.15);padding:17px 28px;border-radius:4px;text-decoration:none;text-align:center;transition:all .25s;}
+.btn-o:hover{border-color:var(--red);color:var(--red);}
+.hero-proof{display:flex;align-items:center;gap:16px;padding-top:32px;border-top:1px solid rgba(0,0,0,.08);}
+.proof-avatars{display:flex;}
+.proof-av{width:32px;height:32px;border-radius:50%;border:2px solid var(--white);background:var(--charcoal);margin-left:-8px;font-size:.65rem;display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:600;}
+.proof-av:first-child{margin-left:0;}
+.proof-text{font-size:.65rem;font-weight:400;color:var(--muted);line-height:1.5;}
+.proof-text strong{color:var(--black);font-weight:600;}
+
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;background:var(--black);padding:14px 0;}
+.marquee{display:flex;white-space:nowrap;animation:marquee 22s linear infinite;}
+.marquee-item{font-size:.56rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.35);padding:0 32px;display:flex;align-items:center;gap:32px;}
+.marquee-item::after{content:'◆';font-size:.35rem;color:var(--red);}
+
+/* PARTNERS LOGOS */
+.partners{padding:48px 20px;background:var(--white);border-bottom:1px solid rgba(0,0,0,.06);}
+.partners-label{font-size:.52rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--light);text-align:center;margin-bottom:28px;}
+.partners-grid{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;}
+.partner-logo{
+  display:flex;align-items:center;justify-content:center;
+  opacity:.35;transition:opacity .3s;
+  filter:grayscale(1);
+}
+.partner-logo:hover{opacity:.7;filter:grayscale(0);}
+.partner-logo img{height:22px;width:auto;object-fit:contain;}
+
+/* SECTION COMMONS */
+.sec-label{font-size:.54rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.sec-label::before{content:'';width:20px;height:2px;background:var(--red);}
+.sec-label.on-dark{color:var(--red);}
+.sec-label.on-light{color:var(--red);}
+.sec-title{font-family:var(--serif);font-size:clamp(1.9rem,7vw,3rem);font-weight:300;line-height:1.15;margin-bottom:16px;}
+.sec-title.on-dark{color:var(--white);}
+.sec-title.on-light{color:var(--black);}
+.sec-title em{font-style:italic;color:var(--red);}
+.sec-sub{font-size:.72rem;font-weight:300;line-height:1.9;}
+.sec-sub.on-dark{color:rgba(255,255,255,.4);}
+.sec-sub.on-light{color:var(--muted);}
+
+/* PROBLEM */
+.problem{padding:80px 20px;background:var(--black);}
+.problem-cards{display:flex;flex-direction:column;gap:2px;margin-top:48px;}
+.prob-card{background:#161616;padding:28px 24px;border-left:2px solid transparent;transition:border-color .3s;}
+.prob-card:hover{border-left-color:var(--red);}
+.prob-ico{font-size:1.4rem;margin-bottom:12px;display:block;}
+.prob-t{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:6px;}
+.prob-d{font-size:.64rem;font-weight:300;color:rgba(255,255,255,.38);line-height:1.75;}
+
+/* SERVICES */
+.services{padding:80px 20px;background:var(--white);}
+.services-grid{display:flex;flex-direction:column;gap:2px;margin-top:48px;}
+.svc{background:var(--pale);padding:36px 28px;position:relative;overflow:hidden;transition:background .3s;}
+.svc:hover{background:#e8e8e6;}
+.svc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.23,1,.32,1);}
+.svc:hover::after{transform:scaleX(1);}
+.svc-num{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:rgba(0,0,0,.07);line-height:1;margin-bottom:14px;}
+.svc-t{font-size:.8rem;font-weight:700;color:var(--black);margin-bottom:8px;letter-spacing:-.01em;}
+.svc-d{font-size:.64rem;font-weight:300;color:var(--muted);line-height:1.8;margin-bottom:20px;}
+
+/* SERVICE TOOL LOGOS */
+.svc-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.tool-badge{
+  display:flex;align-items:center;gap:6px;
+  background:#fff;border:1px solid rgba(0,0,0,.08);
+  border-radius:6px;padding:5px 10px;
+  transition:border-color .25s, box-shadow .25s;
+}
+.tool-badge:hover{border-color:rgba(0,0,0,.18);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.tool-badge img{height:16px;width:auto;object-fit:contain;}
+.tool-badge span{font-size:.52rem;font-weight:600;color:var(--mid);letter-spacing:.04em;}
+.svc-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{font-size:.5rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,0,0,.06);color:var(--muted);padding:4px 10px;border-radius:100px;}
+
+/* HOW */
+.how{padding:80px 20px;background:var(--black);}
+.how-steps{display:flex;flex-direction:column;gap:0;margin-top:48px;}
+.how-step{display:flex;gap:20px;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.how-step:last-child{border-bottom:none;}
+.step-n{font-family:var(--serif);font-size:2rem;font-weight:300;color:rgba(255,255,255,.1);flex-shrink:0;line-height:1;width:48px;text-align:right;}
+.step-t{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:6px;}
+.step-d{font-size:.63rem;font-weight:300;color:rgba(255,255,255,.38);line-height:1.75;}
+.step-tag{display:inline-block;margin-top:8px;font-size:.48rem;font-weight:600;letter-spacing:.12em;color:var(--red);background:rgba(232,68,68,.1);border:1px solid rgba(232,68,68,.2);padding:3px 10px;border-radius:100px;}
+
+/* RESULTS */
+.results{padding:80px 20px;background:var(--white);}
+.results-nums{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px;}
+.result-box{background:var(--pale);padding:32px 20px;text-align:center;}
+.result-box.red{background:var(--red);}
+.result-val{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--black);line-height:1;margin-bottom:8px;}
+.result-box.red .result-val{color:var(--white);}
+.result-label{font-size:.54rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.result-box.red .result-label{color:rgba(255,255,255,.7);}
+.testimonials{display:flex;flex-direction:column;gap:2px;margin-top:2px;}
+.testimonial{background:var(--pale);padding:28px 24px;}
+.testi-quote{font-family:var(--serif);font-size:.95rem;font-weight:300;font-style:italic;color:var(--black);line-height:1.6;margin-bottom:16px;}
+.testi-author{font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;}
+.testi-author::before{content:'—';color:var(--red);}
+
+/* CTA */
+.cta-sec{padding:100px 20px;background:var(--red);text-align:center;position:relative;overflow:hidden;}
+.cta-sec::before{content:'Reverta';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--sans);font-size:10rem;font-weight:800;color:rgba(255,255,255,.05);letter-spacing:-.04em;white-space:nowrap;pointer-events:none;}
+.cta-t{font-family:var(--serif);font-size:clamp(2rem,8vw,3.2rem);font-weight:300;line-height:1.15;color:var(--white);margin-bottom:16px;position:relative;}
+.cta-t em{font-style:italic;}
+.cta-s{font-size:.72rem;font-weight:300;color:rgba(255,255,255,.7);line-height:1.9;margin-bottom:40px;position:relative;}
+.cta-btns{display:flex;flex-direction:column;gap:12px;position:relative;}
+.btn-white{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);background:var(--white);padding:17px 28px;border-radius:4px;text-decoration:none;text-align:center;transition:all .25s;}
+.btn-white:hover{background:var(--black);color:var(--white);}
+.btn-ghost-w{font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--white);border:1.5px solid rgba(255,255,255,.3);padding:17px 28px;border-radius:4px;text-decoration:none;text-align:center;transition:all .25s;}
+.btn-ghost-w:hover{border-color:var(--white);background:rgba(255,255,255,.1);}
+
+/* FOOTER */
+footer{background:var(--black);padding:56px 20px 36px;border-top:1px solid rgba(255,255,255,.05);}
+.footer-logo-txt{font-family:var(--sans);font-size:1.1rem;font-weight:700;letter-spacing:-.02em;color:var(--white);margin-bottom:10px;}
+.footer-logo-txt span{color:var(--red);}
+.footer-tag{font-size:.62rem;font-weight:300;color:rgba(255,255,255,.3);line-height:1.85;margin-bottom:40px;}
+.footer-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:48px;}
+.footer-col-t{font-size:.52rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:16px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{font-size:.62rem;font-weight:300;color:rgba(255,255,255,.35);text-decoration:none;transition:color .25s;}
+.footer-links a:hover{color:var(--red);}
+.footer-bot{display:flex;flex-direction:column;gap:10px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06);}
+.footer-copy{font-size:.52rem;font-weight:300;letter-spacing:.06em;color:rgba(255,255,255,.25);}
+.footer-copy span{color:var(--red);}
+.proto-badge{font-size:.5rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--black);background:var(--red);padding:6px 12px;border-radius:3px;display:inline-block;width:fit-content;}
+.proto-fixed{position:fixed;bottom:16px;right:16px;background:rgba(232,68,68,.95);color:var(--white);font-family:var(--sans);font-size:.5rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:8px 14px;border-radius:4px;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.25);}
+
+/* ANIMATIONS */
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.23,1,.32,1),transform .6s cubic-bezier(.23,1,.32,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.08s;}.d2{transition-delay:.16s;}.d3{transition-delay:.24s;}.d4{transition-delay:.32s;}
+
+/* DESKTOP */
+@media(min-width:768px){
+  nav{padding:20px 48px;}
+  .hero{padding:120px 48px 80px;flex-direction:row;align-items:center;gap:80px;}
+  .hero-content{flex:1;}
+  .hero-btns{flex-direction:row;}
+  .problem-cards{display:grid;grid-template-columns:repeat(3,1fr);}
+  .services-grid{display:grid;grid-template-columns:repeat(2,1fr);}
+  .results-nums{grid-template-columns:repeat(4,1fr);}
+  .footer-cols{grid-template-columns:repeat(4,1fr);}
+  .footer-bot{flex-direction:row;align-items:center;justify-content:space-between;}
+  .cta-btns{flex-direction:row;justify-content:center;}
+}
+@media(min-width:1024px){
+  nav{padding:24px 60px;}
+  .hero,.problem,.services,.how,.results,.cta-sec{padding:100px 60px;}
+  .services-grid{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="proto-fixed">◆ Prototype</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo-svg">
+    <img src="data:image/png;base64,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" style="height:22px;width:auto;object-fit:contain;" alt="Shopify"/>
+    </div>
+    <div class="partner-logo">
+      <!-- Mailchimp-like icon using text -->
+<img src="data:image/png;base64,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" style="height:22px;width:auto;object-fit:contain;" alt="Mailchimp"/>
+    </div>
+    <div class="partner-logo">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAABz0lEQVR42u2WTU4bQRCFv5puR5EI2ebnAMkJgAU3YM2eXXINDsAl2AJeegMHADHI++QA+VknSJGnq18WM5gxju2xbFlKlJJqM9Ndr6ur3qs2SWKDVrBh+/cB49SXnGs3Wy2yBEVRe8tsomlynlqwsj2JGZ/+SLe36PQU+/YdPZx0GTPDAL1+hR0dEXd3J0ElSSlJkkYXfVUhyGEtPgpBo35fbQxTzgLI9/f4u/fEr1/Qs+fg3jo1IB7r2iXrEGD0C3/zlvD5E8XWVrO3QU7DoRLILcgpZjhyi/IizlnTcgtKoDQcjrMcV9PcF3Zm3n6JlCCnOoMuDWaGpTSDh7OuKkYgo48fyIMBvrODvOoGLE0kshQHLAR6BwfE62vy+Tm+t4e8wnJqCr1upZHAHcuZ3uEh8eYGXV1S7e+DqdMVFyurSfKaZx27Ny7JagiBLOFnZ3ByQlGW9AARGu6sEVDuVIMBHB9T3N3VVQs9JD1muTBIw0MvSyWzuTysXmwrgTLIQ28xHy3UMctyzMNxhgqhaeE5Bf/5AywiY1KJFtRZIbSmRRdpa5F4dWlri3d/veJd/VG8H+bhmsaTmdX7ZoynjQ9gm3ombvSJ8f+Z+DcC/gZx5eMCrNRPWAAAAABJRU5ErkJggg==" style="height:22px;width:auto;object-fit:contain;" alt="YouTube"/>
+    </div>
+    <div class="partner-logo">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAD6ElEQVR42sWWS2jcVRTGf+f+H/NKhpJJCtpoJFQxiGIWMQtBtxIU4sK66LpLwUJxUdQqPkHduXVZwUBXhRDJUrIosVqMdZSWYqVNS5JJ7MxkHv/HPS7+k2kmmWSSCHphmOHeO/e759zvfOcTVVW6DFWw3Zd6DiOCSPc12Qm4BeQY4d+M2GpX4A5AVdobSuUGf63ViVtzvYLd2uMIPD6YoZBP7zoTwN0JVqkHvDtzg5nFdUq1GAUOmlhpARcyDqcmBvj41JP0Z/wOUFFNYlSgWg+Y+vJnFoo1/H4PzyQpsXr4dDYrIS+O5Zg99zx9Gb99GQPJmxmBC5duslCscayQwjMQq1JtWpKsK6oH+zgCxwopFoqbXLh0EyMPCWhUwTFCqdzg4pUSqX6PMLIEkeKJZfyED2qJYvZk3i6GA0FoSfV7XLxSolRu4BhBFcwW8p9rdTZqMa4RYgt9nnL5raf56cMJvj1zEheLcnDmKkkgG7WY22t12pncThoFjEAjsDw7nOHlZ46DMUxPPMrokEcjsBylWrZTwOxctArplOGXO3V+KK4Clss/LnNrJSDjG4wRXEcwIhhJohARHCMHql23222MQDUUXvp0iZFBn9srTfxsCrFKrRomN/UdxAhxM8TzhTBUMA65jIPdh9Zut1qKLPT5cHbqMVKeSzOM+HzuHkN9Lm9Pj+AYw9xSiT/u1fng9ZOMPZJj+UGTr+fvMv/7JrmMuyeou1fOPQPvTI2QTvvU6gGfzS4z1O9ydmoUgMnRHCcGsgwP5tr/e238OK9+dY2561WyGbdr/Zr9Hnq1GhLFylorjZFVImsJY2XyqSGGC1mWbm0QhDFBZBHj8P70Ewi6pzqZfR+4RRC3RQYBXJPM15oRr3xxlefOX+XMN9fxHEGB4YE0+awhirsXkTk0xW0iAL/dKfP9rxXcfIb5YplqPUToLYPmqO2nHliMKzgonittoF6FcWTArXak9G5dPVnaoT7aeWBLx3eBdNt7aEDfM4gk31tRGSf57blm3709AUU6868Ky6Uacazc30jEN4yU+2tVxHFY+bve7h7WKndXN8nnfJbXa7tKYvu5Yq2qSGIpxs4vUg4ER5K3ybqJuluFWiwIStZtqZFCI35YLhk3KQNt74VYIZ9Sip9MUMink/YkknToQj7N6ckCzUqYpIdETx+EQjWSlhgI5dZcLZIOkaiEyVo1SsB8z9CshJx+oUAhnya2mmRxt8W4xkJxk1S/1y747S1G9mg72+ejtsXIMntuvMNitF3bdhP13swNvltcp1SPD0V5WjwoZB3enBjgozf2MFH72UR7WBPM/jbx/zXC/4XV/weVJiLnRdx00gAAAABJRU5ErkJggg==" style="height:22px;width:auto;object-fit:contain;" alt="LinkedIn"/>
+    </div>
+    <div class="partner-logo">
+      <img src="data:image/png;base64,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" style="height:22px;width:auto;object-fit:contain;" alt="WhatsApp Business"/>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="reveal">
+    <div class="sec-label on-dark">O problema</div>
+    <h2 class="sec-title on-dark">Boa empresa.<br><em>Invisível online.</em></h2>
+    <p class="sec-sub on-dark">A maioria dos negócios locais da Madeira perde clientes todos os dias — não porque sejam maus, mas porque simplesmente não aparecem quando alguém procura.</p>
+  </div>
+  <div class="problem-cards">
+    <div class="prob-card reveal d1">
+      <span class="prob-ico">🔍</span>
+      <div class="prob-t">Não aparecem no Google</div>
+      <div class="prob-d">Quando alguém pesquisa "restaurante funchal", o teu negócio não está nos primeiros resultados. Os clientes vão à concorrência.</div>
+    </div>
+    <div class="prob-card reveal d2">
+      <span class="prob-ico">📱</span>
+      <div class="prob-t">Sem presença nas redes</div>
+      <div class="prob-d">Instagram e Facebook desactualizados ou inexistentes. O cliente potencial não consegue avaliar o negócio. Desconfiança.</div>
+    </div>
+    <div class="prob-card reveal d3">
+      <span class="prob-ico">💸</span>
+      <div class="prob-t">Publicidade sem retorno</div>
+      <div class="prob-d">Já tentaste anúncios e não funcionou? O problema raramente é o produto — é a estratégia, o público, e o criativo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="reveal">
+    <div class="sec-label on-light">O que fazemos</div>
+    <h2 class="sec-title on-light">Serviços que<br><em>geram resultados.</em></h2>
+    <p class="sec-sub on-light">Não vendemos pacotes genéricos. Cada estratégia é construída à medida do teu negócio e dos teus objectivos.</p>
+  </div>
+  <div class="services-grid">
+
+    <!-- SVC 1 -->
+    <div class="svc reveal d1">
+      <div class="svc-num">01</div>
+      <div class="svc-t">Google Ads & SEO Local</div>
+      <div class="svc-d">Aparecer quando o cliente procura — no momento exacto da intenção de compra.</div>
+      <div class="svc-tools">
+        <div class="tool-badge">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAE2klEQVR42q2Wa4hVVRTHf2ufx7137h3HmWo0SdPyEaH2MMEhxjB7YJCBEUVFkiX6oU+BEEUUQUGfGggCH2GJogQhBVkgqdkoBkYTilpKio9pxtEZ53Hnzr3n7L36cO6M13k4E3U+btZZ//Vf6//fe4mqKhP8nIKR8c9u9vkTDVSSxFf7LGfak5M5U4S6nIcC8n8CqoKIsu3nErsOO64NKALUZOCFBo9XGkOcyoSYmom0UQS2HyryyQ+WYgy5UMiGQjESmr6P2XGohJEk9j8BqipGoLO7i53NPdRWeXgmSewUPAN1OcMXP8VcuBojEwA1480NLH/8/hXdhRS+d2PCQdC+orD5QDShOY4NqDbpZfc3aPsO1K8BjUeEWQfVaWHfceXo2Wjc1pqxuQlohJ5+n7nZY9QFHcQuQBgrm7Dxx5jYakV3JgqoDsTgLm0hvnqMW3PXeHrKZ/TZECN2VGFlU3DsPOxpKbN0Y5Q10vhJpCt1okcWIMUriCf02Ryvt/xCW2kWoRTRYbWKQGShNqtsXZemJmOGzm/OUBUwuHMfYvrbEC/EuoDqsIs10z+gaH2M6Ki/pXy41CVsb44QKae6aUvVgXi4vmOYCxvBT4HGeBLj4hSP1e/iocn76Iuzo7bWOpiUht1HLX91xBgzUkBmuFgUcGfeQuICGFPBwOCZmHUz3sWTCMUbdUaegUJR2PRjPI5o1CbsOr5F2vdAkE7OBgPFYuMMC2oPs6L+S3qjDN4YLHNpOHjScejPkQIylTZwbgB75h1UPKyakdIWUGt4dWYTdZk8kfPGNLvnCZv3R5Ril/x3A6A6nBjMxU8Je4/jh4IvBQyKq0hpBGzRMXXhi7y8tIr8QFzZ9RtsUhXCiYuw+2h8A0tRZ1VFkNJ5Lh9aQnM+y2XNMM3L80jYTo0pYtXHiIAtYXNzMEtaiGyKtZsKnLsipIOR4hABayGbhq3rQm7JJTM3DhCEvSc+59nWebydb6ApP58N3Q0817mMI6XbyiIR1DnM3R+BpEn5jrWP+kROR3ht0CaBD5d7lK0Hr9vEGDGc6jzFhhMt9PrTqGWAyRJTZ0q0umre7FnCeVuDiQvY+ieR+lUYtTj1aLwn4OG5Qm8hUefoNhG++81x6u+k/QZg5+m9FGxMlThiBIsQI0ySiA6X5ev+GeD5MPvjYSIR1i8PSIWKHeMqMwYKpWSWQ6I523uR0AQMF7lFCMVwesDCHWvwqu8bss+gEGZP8XlmkaFnYHSWqhB4wvmriRsMQCB+2fLDBy+oK5KpmgF3vZfYp2Jgg3NZ3Rhw+2SlFDPmPEOvwhYNUx+gPx7AFw8pN00QPAkoRV0snfcaBNPQ8j1bCegUarMeqxs9egcU31wHFQHfg0KkLJolgGAU5fm5K1g8ZT5thStYtagqsVpa8x08cWcjT81eiarDG6X8wZVj5YMhy+4V2rqV2CasrIP2buX+mbBqcZAsY06dCkJXsYemlm00t/5Kvy1QHVTz+PQG3lj4Ehk/haJD7Eff6qAQObbsjzhw0pEvQtqHJXMM65f7TK7ykjhV1cpk3aVeekp5alM15ILM0JUu42wslbtpvujo7ldyaWFS+V0cLGroAVa0vKWZiivKISLjglWC6rBN3GlSyNBch7/4CXC5Gv7FDj/8Da8QVuX3DydcUrRoViXjAAAAAElFTkSuQmCC" style="height:16px;width:auto;object-fit:contain;" alt="Google Ads"/>
+          <span>Google Ads</span>
+        </div>
+        <div class="tool-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.9c-.3 1.4-1 2.5-2.1 3.3v2.7h3.4c2-1.8 3.3-4.5 3.3-7.8z" fill="#4285F4"/>
+  <path d="M12 23c3 0 5.5-1 7.3-2.7l-3.4-2.7c-1 .7-2.3 1.1-3.9 1.1-3 0-5.5-2-6.4-4.8H2.1v2.8C3.9 20.5 7.7 23 12 23z" fill="#34A853"/>
+  <path d="M5.6 13.9c-.2-.7-.4-1.4-.4-2.1s.1-1.4.4-2.1V6.9H2.1C1.4 8.3 1 9.9 1 11.8s.4 3.5 1.1 4.9l3.5-2.8z" fill="#FBBC04"/>
+  <path d="M12 4.9c1.7 0 3.2.6 4.4 1.7l3.2-3.2C17.5 1.6 15 .6 12 .6 7.7.6 3.9 3.1 2.1 6.9l3.5 2.8C6.5 6.9 9 4.9 12 4.9z" fill="#EA4335"/>
+</svg>
+          <span>Google Maps</span>
+        </div>
+      </div>
+      <div class="svc-tags"><span class="tag">SEO</span><span class="tag">SEM</span><span class="tag">Local</span></div>
+    </div>
+
+    <!-- SVC 2 -->
+    <div class="svc reveal d2">
+      <div class="svc-num">02</div>
+      <div class="svc-t">Meta Ads & Social Media</div>
+      <div class="svc-d">Campanhas no Instagram e Facebook que chegam às pessoas certas. Criação de conteúdo e gestão de comunidade.</div>
+      <div class="svc-tools">
+        <div class="tool-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="12" fill="#1877F2"/>
+  <path d="M16.7 15.5l.5-3.2h-3V10c0-.9.4-1.7 1.7-1.7h1.3V5.6S16 5.4 14.7 5.4c-2.5 0-4.2 1.5-4.2 4.3v2.6H7.6v3.2h2.9V23c.6.1 1.2.1 1.8.1s1.2 0 1.8-.1v-7.5h2.6z" fill="white"/>
+</svg>
+          <span>Facebook Ads</span>
+        </div>
+        <div class="tool-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <defs><radialGradient id="ig3" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs>
+  <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig3)"/>
+  <circle cx="12" cy="12" r="4.5" fill="none" stroke="white" stroke-width="1.5"/>
+  <circle cx="17" cy="7" r="1.2" fill="white"/>
+</svg>
+          <span>Instagram</span>
+        </div>
+        <div class="tool-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.95a8.16 8.16 0 004.77 1.52V7.03a4.85 4.85 0 01-1-.34z" fill="#010101"/>
+</svg>
+          <span>TikTok Ads</span>
+        </div>
+      </div>
+      <div class="svc-tags"><span class="tag">Criativos</span><span class="tag">Targeting</span><span class="tag">Retargeting</span></div>
+    </div>
+
+    <!-- SVC 3 -->
+    <div class="svc reveal d3">
+      <div class="svc-num">03</div>
+      <div class="svc-t">Web Design & Landing Pages</div>
+      <div class="svc-d">Websites que convertem visitantes em clientes. Rápidos, modernos, optimizados para mobile.</div>
+      <div class="svc-tools">
+        <div class="tool-badge">
+          <img src="data:image/png;base64,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" style="height:16px;width:auto;object-fit:contain;" alt="WordPress"/>
+          <span>WordPress</span>
+        </div>
+        <div class="tool-badge">
+          <img src="data:image/png;base64,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" style="height:22px;width:auto;object-fit:contain;" alt="Shopify"/>
+          <span>Shopify</span>
+        </div>
+
+      </div>
+      <div class="svc-tags"><span class="tag">Mobile First</span><span class="tag">SEO</span><span class="tag">CRO</span></div>
+    </div>
+
+    <!-- SVC 4 -->
+    <div class="svc reveal d1">
+      <div class="svc-num">04</div>
+      <div class="svc-t">Gestão de Reputação</div>
+      <div class="svc-d">Reviews no Google, TripAdvisor e resposta a comentários. A reputação digital é o novo boca-a-boca.</div>
+      <div class="svc-tools">
+        <div class="tool-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.9c-.3 1.4-1 2.5-2.1 3.3v2.7h3.4c2-1.8 3.3-4.5 3.3-7.8z" fill="#4285F4"/>
+  <path d="M12 23c3 0 5.5-1 7.3-2.7l-3.4-2.7c-1 .7-2.3 1.1-3.9 1.1-3 0-5.5-2-6.4-4.8H2.1v2.8C3.9 20.5 7.7 23 12 23z" fill="#34A853"/>
+  <path d="M5.6 13.9c-.2-.7-.4-1.4-.4-2.1s.1-1.4.4-2.1V6.9H2.1C1.4 8.3 1 9.9 1 11.8s.4 3.5 1.1 4.9l3.5-2.8z" fill="#FBBC04"/>
+  <path d="M12 4.9c1.7 0 3.2.6 4.4 1.7l3.2-3.2C17.5 1.6 15 .6 12 .6 7.7.6 3.9 3.1 2.1 6.9l3.5 2.8C6.5 6.9 9 4.9 12 4.9z" fill="#EA4335"/>
+</svg>
+          <span>Google Reviews</span>
+        </div>
+        <div class="tool-badge">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAADrUlEQVR42u2WTWhcVRTHf3fem8kkkybpR6bpJNDUYLVp1UqjtqJY+6EFUUFBSrsM6MIuFEW0i4pUURGqQl246M6FKArqQqlQCw1YbbShOla6aENpM01G0zTNfL15866L/7xOMpNCldKF9MKDmXPu+brn/P/3GrI7LTdwRbjB62bA677ca95pgeAq8xUxYK5XwDBIzIG403gmAVCq6AuD/6uAgVU14Wp15eRcHk5Owelp+Lsk3aIm6GuDVe3Qk5DtjF+zNY0JNAZsi4FjaoGHs/DpaTh8Ac7nVWXc0d5iBYo+dCfgoS7Yfgvc01kLVLEwU57j3pDdabEoSMGHA6cg50PCVSWHxmDKg/VJ2L4ClrZAR0zWUx6MF5TQ0QnJN6VgcVPNx+BKaHYV3IQVGqASQFsUbm2HPb+AF0A5gGhEyYwX1K8NyVrWqzrgy1HpHAPTZfj8jGyiEdi7Tj6LFTCmHhYGPAuP9cCahTrOdUtgRx883avqB4/AWyNK0ABvjkhW8LVnR59sLHDHQvkqW2aPsDtnWNqi8PYJODIOL66Gl9ZAPCp9JgevDsP7abg/KdkHaXiqF94ZgK6EZIUy7Psd9qX1vXanjt4xdT2MGike/x5WtsNnm+BYFj5Maxr33K1jfvQ7GFgi58N/wcFt4EZg73GY9OCF1dI/cwhOTcM3W9Tb8uweWgsxF87mYKIIu/rBt/D6r3DyEngVaHHhvftU3dCEmOCBLuhphZd/gi9GhdWLJfhqK2zthqFx+Uw2g1cGY+pgYW0NvNZqaByjhnuBdI5RAuFvkM4Y/S8Hsg111s7DpaHDnoRG+nAG4i7sXgv9HbAlpZ5mcnDiYg2Lv03ChZx0m1Pau/suaHLkY3GTfIYJMRsWpYoA/ORy+PhP+CgNz/fD5mVgIjBdgleOQSYP7VUcjhXgjRF4dwA+2Qi26nj/H/DtOXjudvm8VD80ITm7BvI+7PpRzPLwMljfKRwdPA9nLkMqAZc9BVwQg7EcrFgAj3Sr6qNZ+CEDG7tg/wb13rdXkGHmPDECq+PI+6ry67MaooiB3laxxr2dMDikDA88CD9nxU6jM7JPxuGJ5fDsbWKaUmUOn5qGN01gNeYJF7JFsYgbgVSLZI6BkUntXbtIlJXzYSwPfgBLm6EzLpkfNJC3mfcRFd59sSpFWTSZlSqhN1fJu1DRUTlGkDBoSr3gqnfk/Pdh6MS3UPZrUAmzLdbBwiJ6CyfeMf/xAjZcGeeGG/5aZDdfbf/LgP8ALVhh+VXtQu8AAAAASUVORK5CYII=" style="height:16px;width:auto;object-fit:contain;" alt="TripAdvisor"/>
+          <span>TripAdvisor</span>
+        </div>
+        <div class="tool-badge">
+          <img src="data:image/png;base64,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" style="height:16px;width:auto;object-fit:contain;" alt="TheFork"/>
+          <span>TheFork</span>
+        </div>
+      </div>
+      <div class="svc-tags"><span class="tag">Reviews</span><span class="tag">Reputação</span></div>
+    </div>
+
+    <!-- SVC 5 -->
+    <div class="svc reveal d2">
+      <div class="svc-num">05</div>
+      <div class="svc-t">Email & CRM Marketing</div>
+      <div class="svc-d">Reactivar clientes antigos custa 5× menos do que adquirir novos. Automações e fidelização para o teu negócio.</div>
+      <div class="svc-tools">
+        <div class="tool-badge">
+          <img src="data:image/png;base64,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" style="height:22px;width:auto;object-fit:contain;" alt="Mailchimp"/>
+          <span>Mailchimp</span>
+        </div>
+        <div class="tool-badge">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAcCAYAAACQ0cTtAAABQUlEQVR42t1WsY0CQQwc24dERnI0QrIFASIkpwEyJEISCqADEiSIIKGRa+CCteeDfx4CwtuTYCQHK1ka2Z4dW0gSPUHRI3olqwCgdCdF5En2eJSEu6O63++Yz+dlZqQKkqjrGofDATidTgRQNDabDUkSl8uFqtp5DAYDqipTSiRJd2dFEhFRRBQksd1u8RBhEembGdwds9kMKSW4O8wMOJ/Pnc7n0cbxeMymaejudHeSpJZoX0RgvV6jrmtEBFT/aLqszMwIgCklRgRzznyFdl3RcDjEbrd7axSfacQkoapo2xaLxeKt32rX/mdmuN1u2O/3MDPknJ8JHy39iICIoGkarFarfzMuUtnrNxARXq9XkmTOmSoiUNUiISJYLpfPBdrniqlGoxEmk0nR5Xk8HjGdTiF9nXLu/kv2dQfPdx+pP+UXdvXs1W84AAAAAElFTkSuQmCC" style="height:16px;width:auto;object-fit:contain;" alt="Klaviyo"/>
+          <span>Klaviyo</span>
+        </div>
+      </div>
+      <div class="svc-tags"><span class="tag">Automação</span><span class="tag">CRM</span><span class="tag">Fidelização</span></div>
+    </div>
+
+    <!-- SVC 6 -->
+    <div class="svc reveal d3">
+      <div class="svc-num">06</div>
+      <div class="svc-t">Consultoria & Estratégia</div>
+      <div class="svc-d">Auditoria digital completa, plano de acção e acompanhamento mensal com relatório Art.23 CIRC.</div>
+      <div class="svc-tools">
+        <div class="tool-badge">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAACh0lEQVR42r2WvWsUURTFf/fNzMImJu5gSCSCiSgoikr8AFsVrGKV1sI/wFaxsLEQSWNhIzaCjaWFjSC6KqRSiJpgoUQJiApGk8VNdrM7M+9azCbZZTZrEmd83ZvH3PPOvee+e0RVlf+43HTDKazcX0zWgAoIiDS2ti2oSRUMsAtv0MVPDTDNAjAOqvV5ghdnCJ8cI3h8iPD9tfgSalMG1AgQoo+30C/PwfOAGnbqBnb+dcxUozQZNmpWegueiUVjXMCg5Q8tWUhXNGIa6WtcAAviZCUa2gqk3Td3S4Ft1LHXUm58adRoJXNB29T9O6AqiKBBlaVX94nKc3SNjOENHMyKoaJhnZ/3RqlMFhEXysVx+i89Jbf7FNok/U5rY0WwEYih9vkl1akijp/D2Z7HLi5Rnri9loH0GMbBbPkHmLiRNbLgClpbbO3HVBiu6sVpfapUN61Uk0WvbR5Qm3rNRhuuz9ZrKLLWW8YBnIwAG0Mz+v2d0qMrBF+nyQ2fpDB6E9Pdt+n0bYyhWuYfXKAyWcTpgdrMO2z1F30XHxLbH0lm42+TpC3gKrtv1GYncH0PRXEKQm3mWZzdXDdI/OLEQ96BKFwTjzhNINIyB5OiEQEUk/dxenYSVQLECLYS4PhDAHiDR5AcaD1ERNBqhNt/IP69MAJBFOPZEFCk90ACxrTQV0W8PP7YXRx/F3Y5xB3Ygz92B1Rxd+ylcH4cMXlsPaDr+Fl6T18FtTj7LyND5yAMQfI4R69j/BMJMyVJXxrXyS6XCOdm8Qb2IbltTYIRwoVZtFrGGzycMFFamoZcD9I13PK9A2Abi9e8T5zpajlagq9jE2Vd562a9JrNwdYbwJ3OOgJmtP4ACOIRUgm1KL4AAAAASUVORK5CYII=" style="height:16px;width:auto;object-fit:contain;" alt="Google Analytics"/>
+          <span>Google Analytics</span>
+        </div>
+        <div class="tool-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="14" r="6" fill="none" stroke="#4285F4" stroke-width="2.5"/>
+  <circle cx="12" cy="14" r="2" fill="#4285F4"/>
+  <path d="M12 8 C12 5 14 3 14 3" stroke="#4285F4" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <circle cx="14" cy="3" r="1.5" fill="#4285F4"/>
+</svg>
+          <span>Looker Studio</span>
+        </div>
+      </div>
+      <div class="svc-tags"><span class="tag">Auditoria</span><span class="tag">Relatórios</span><span class="tag">Estratégia</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="reveal">
+    <div class="sec-label on-dark">Como trabalhamos</div>
+    <h2 class="sec-title on-dark">Vamos até ti.<br><em>Literalmente.</em></h2>
+    <p class="sec-sub on-dark">A nossa equipa desloca-se de ID.Buzz pela Madeira. Saímos do escritório e vamos ao encontro do negócio — no terreno, cara a cara.</p>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal d1">
+      <div class="step-n">01</div>
+      <div>
+        <div class="step-t">Prospecção no terreno</div>
+        <div class="step-d">A nossa equipa identifica negócios sem presença digital e vai ao cliente — não esperamos que ele venha até nós.</div>
+        <span class="step-tag">ID.Buzz Reverta</span>
+      </div>
+    </div>
+    <div class="how-step reveal d2">
+      <div class="step-n">02</div>
+      <div>
+        <div class="step-t">Diagnóstico gratuito</div>
+        <div class="step-d">Auditoria digital em 30 minutos. Mostramos exactamente onde estão as lacunas. Sem custo, sem compromisso.</div>
+      </div>
+    </div>
+    <div class="how-step reveal d3">
+      <div class="step-n">03</div>
+      <div>
+        <div class="step-t">Proposta à medida</div>
+        <div class="step-d">Plano concreto com objectivos mensuráveis, prazo de execução e investimento claro. Sem surpresas.</div>
+      </div>
+    </div>
+    <div class="how-step reveal d4">
+      <div class="step-n">04</div>
+      <div>
+        <div class="step-t">Execução e relatório mensal</div>
+        <div class="step-d">Implementamos, optimizamos, e reportamos. Cada mês recebes resultados reais — não métricas de vaidade.</div>
+        <span class="step-tag">Relatório Art.23 CIRC</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results" id="results">
+  <div class="reveal">
+    <div class="sec-label on-light">Resultados</div>
+    <h2 class="sec-title on-light">Números que<br><em>falam por si.</em></h2>
+  </div>
+  <div class="results-nums">
+    <div class="result-box reveal d1"><div class="result-val">3×</div><div class="result-label">Retorno médio em Ads</div></div>
+    <div class="result-box red reveal d2"><div class="result-val">+180%</div><div class="result-label">Visibilidade orgânica</div></div>
+    <div class="result-box reveal d3"><div class="result-val">30d</div><div class="result-label">Primeiros resultados</div></div>
+    <div class="result-box reveal d4"><div class="result-val">4.9★</div><div class="result-label">Satisfação de clientes</div></div>
+  </div>
+  <div class="testimonials">
+    <div class="testimonial reveal">
+      <div class="testi-quote">"Em 60 dias já estávamos com reservas completas ao fim de semana. Nunca pensei que o digital pudesse trazer tantos clientes novos."</div>
+      <div class="testi-author">Proprietário, Restaurante — Funchal</div>
+    </div>
+    <div class="testimonial reveal d1">
+      <div class="testi-quote">"A equipa da Reverta veio cá, percebeu o negócio, e fez um trabalho que nenhuma agência de Lisboa alguma vez conseguiu fazer."</div>
+      <div class="testi-author">Gerente, Clínica de Estética — Câmara de Lobos</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="cta">
+  <div class="reveal">
+    <h2 class="cta-t">Pronto para<br><em>dar a volta?</em></h2>
+    <p class="cta-s">Diagnóstico digital gratuito em 30 minutos.<br>Sem compromisso. Sem jargão. Apenas clareza.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-white">Marcar diagnóstico gratuito</a>
+      <a href="#" class="btn-ghost-w">Falar por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo-txt">Re<span>verta</span>™</div>
+  <p class="footer-tag">Agência de marketing para negócios locais da Madeira.<br>Resultados reais. Sem contratos longos. Sem jargão.</p>
+  <div class="footer-cols">
+    <div>
+      <div class="footer-col-t">Serviços</div>
+      <ul class="footer-links">
+        <li><a href="#">Google Ads & SEO</a></li>
+        <li><a href="#">Meta Ads</a></li>
+        <li><a href="#">Web Design</a></li>
+        <li><a href="#">Reputação Online</a></li>
+        <li><a href="#">Consultoria</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-t">Empresa</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre a Reverta</a></li>
+        <li><a href="#">A Nossa Equipa</a></li>
+        <li><a href="#">Casos de Sucesso</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-t">Contacto</div>
+      <ul class="footer-links">
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Email</a></li>
+        <li><a href="#">Funchal, Madeira</a></li>
+        <li><a href="#">Diagnóstico Gratuito</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-t">Grupo Apex</div>
+      <ul class="footer-links">
+        <li><a href="#">Apex Commerce</a></li>
+        <li><a href="#">Brayan London</a></li>
+        <li><a href="#">Madeira AI Concierge</a></li>
+        <li><a href="#">OceanData</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <div class="footer-copy">© 2025 Reverta™ · Parte do grupo <span>Apex Commerce</span> · Madeira, Portugal</div>
+    <span class="proto-badge">Prototype v1.0</span>
+  </div>
+</footer>
+
+<script>
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
